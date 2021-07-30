@@ -1,34 +1,23 @@
 import itertools
 from datetime import datetime
 
-ACTIONS = {
-    "action_1": (20, 5),
-    "action_2": (30, 10),
-    "action_3": (50, 15),
-    "action_4": (70, 20),
-    "action_5": (60, 17),
-    "action_6": (80, 25),
-    "action_7": (22, 7),
-    "action_8": (26, 11),
-    "action_9": (48, 13),
-    "action_10": (34, 27),
-    "action_11": (42, 17),
-    "action_12": (110, 9),
-    "action_13": (38, 23),
-    "action_14": (14, 1),
-    "action_15": (18, 3),
-    "action_16": (8, 8),
-    "action_17": (4, 12),
-    "action_18": (10, 14),
-    "action_19": (24, 21),
-    "action_20": (114, 18),
-}
+import csv
+
+with open("bruteforce_data.csv", newline='') as f:
+    reader = csv.DictReader(f)
+    data = []
+    for row in reader:
+        row["cost"] = int(row["cost"])
+        row["profit"] = int(row["profit"])
+        data.append(row)
+
+action_names = [row["actions"] for row in data]
 
 
-def get_total(actions: list) -> int:
+def get_total(data: list) -> int:
     total = 0
-    for action in actions:
-        total += ACTIONS[action][0]
+    for action in data:
+        total += action["cost"]
     return total
 
 
@@ -36,35 +25,35 @@ def flatten_list(unflatten_list):
     return [item for sublist in unflatten_list for item in sublist]
 
 
-def get_all_combinations() -> list:
+def get_all_combinations(action_names: list) -> list:
     wallets = []
-    for i in range(len(ACTIONS)):
-        wallets.append(list(itertools.combinations(list(ACTIONS.keys()), i)))
+    for i in range(len(data)):
+        wallets.append(list(itertools.combinations(list(action_names), i)))
     return flatten_list(wallets)
+
 
 
 # print(len(get_all_combinations())) # 1048575
 
-def filtered_wallet():
+def filtered_wallet(data: list):
     filter_wallets = []
-    for combination in get_all_combinations():
+    for combination in get_all_combinations(data):
         if get_total(combination) <= 500:
             filter_wallets.append(combination)
     return filter_wallets
 
-
 # print(len(filtered_wallet())) # 813347
 
-def get_profit(actions: list) -> int:
+def get_profit(data: list) -> int:
     total = 0
-    for action in actions:
-        total += ACTIONS[action][0] * (ACTIONS[action][1] / 100)
+    for action in data:
+        total += action["cost"] * (action["profit"] / 100)
     return total
 
 
-def get_best_wallet() -> dict:
+def get_best_wallet(data: list) -> dict:
     profit_wallet = []
-    for wallet in filtered_wallet():
+    for wallet in filtered_wallet(data):
         profit_wallet.append(
             {
                 "profit": get_profit(wallet),
@@ -75,8 +64,10 @@ def get_best_wallet() -> dict:
 
     return sorted(profit_wallet, key=lambda x: x["profit"], reverse=True)[0]
 
+
 # start_time = datetime.now()
-print(get_best_wallet())
+print(get_best_wallet(data))
 # end_time = datetime.now()
 # print(end_time-start_time)
 
+# {'profit': 99.08000000000001, 'total': 498, 'wallet': ('action_4', 'action_5', 'action_6', 'action_8', 'action_10', 'action_11', 'action_13', 'action_18', 'action_19', 'action_20')}
