@@ -1,18 +1,9 @@
-import csv
+from utils import read_csv
 
-with open("bruteforce_data.csv", newline='') as f:
-    reader = csv.DictReader(f)
-    data = []
-    for row in reader:
-        row["cost"] = int(row["cost"])
-        row["profit"] = int(row["profit"])
-        data.append(row)
-
-
-action_names = [row["actions"] for row in data]
+data = read_csv("bruteforce_data.csv")
 
 for row in data:
-    row["money"] = row["cost"] * row["profit"] / 100
+    row["money"] = row["price"] * row["profit"] / 100
 
 clean_data = sorted(data, key=lambda x: x["money"], reverse=True)
 
@@ -21,11 +12,11 @@ total = 0
 profit = 0
 while total <= 500:
     for row in clean_data:
-        if row["cost"] + total > 500:
+        if row["price"] + total > 500:
             break
         else:
-            wallet.append(row["actions"])
-            total += row["cost"]
+            wallet.append(row["name"])
+            total += row["price"]
             profit += row["money"]
     break
 

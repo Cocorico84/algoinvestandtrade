@@ -1,23 +1,12 @@
 import itertools
-from datetime import datetime
+from utils import read_csv, timer
 
-import csv
-
-with open("bruteforce_data.csv", newline='') as f:
-    reader = csv.DictReader(f)
-    data = []
-    for row in reader:
-        row["cost"] = int(row["cost"])
-        row["profit"] = int(row["profit"])
-        data.append(row)
-
-action_names = [row["actions"] for row in data]
-
+data = read_csv("bruteforce_data.csv")
 
 def get_total(data: list) -> int:
     total = 0
     for action in data:
-        total += action["cost"]
+        total += action["price"]
     return total
 
 
@@ -47,10 +36,10 @@ def filtered_wallet(data: list):
 def get_profit(data: list) -> int:
     total = 0
     for action in data:
-        total += action["cost"] * (action["profit"] / 100)
+        total += action["price"] * (action["profit"] / 100)
     return total
 
-
+@timer
 def get_best_wallet(data: list) -> dict:
     profit_wallet = []
     for wallet in filtered_wallet(data):
@@ -65,9 +54,5 @@ def get_best_wallet(data: list) -> dict:
     return sorted(profit_wallet, key=lambda x: x["profit"], reverse=True)[0]
 
 
-# start_time = datetime.now()
 print(get_best_wallet(data))
-# end_time = datetime.now()
-# print(end_time-start_time)
-
 # {'profit': 99.08000000000001, 'total': 498, 'wallet': ('action_4', 'action_5', 'action_6', 'action_8', 'action_10', 'action_11', 'action_13', 'action_18', 'action_19', 'action_20')}
