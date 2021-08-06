@@ -3,6 +3,7 @@ from utils import read_csv, timer
 
 data = read_csv("bruteforce_data.csv")
 
+
 def get_total(data: list) -> int:
     total = 0
     for action in data:
@@ -21,7 +22,6 @@ def get_all_combinations(action_names: list) -> list:
     return flatten_list(wallets)
 
 
-
 # print(len(get_all_combinations())) # 1048575
 
 def filtered_wallet(data: list):
@@ -31,6 +31,7 @@ def filtered_wallet(data: list):
             filter_wallets.append(combination)
     return filter_wallets
 
+
 # print(len(filtered_wallet())) # 813347
 
 def get_profit(data: list) -> int:
@@ -38,6 +39,7 @@ def get_profit(data: list) -> int:
     for action in data:
         total += action["price"] * (action["profit"] / 100)
     return total
+
 
 @timer
 def get_best_wallet(data: list) -> dict:
