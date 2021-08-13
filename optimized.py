@@ -1,11 +1,5 @@
 from utils import read_csv, timer
 
-data = read_csv("bruteforce_data.csv")
-
-for row in data:
-    row["money"] = row["price"] * row["profit"] / 100
-
-clean_data = sorted(data, key=lambda x: x["money"], reverse=True)
 
 @timer
 def optimized():
@@ -27,8 +21,54 @@ def optimized():
         "wallet": wallet
     }
 
-# print(optimized())
 
-# {'total': 500, 'profit': 89.48000000000002, 'wallet': ['action_20', 'action_6', 'action_4', 'action_5', 'action_12', 'action_10', 'action_19', 'action_16']}
+@timer
+def knapSack(capacity, wt, val, n):
+    matrix = [[0 for x in range(capacity + 1)] for x in range(n + 1)]
+
+    for i in range(n + 1):
+        for w in range(capacity + 1):
+            if i == 0 or w == 0:
+                matrix[i][w] = 0
+            elif wt[i - 1][0] <= w:
+                matrix[i][w] = max(val[i - 1] + matrix[i - 1][[w - wt[i - 1][0]][0]], matrix[i - 1][w])
+            else:
+                matrix[i][w] = matrix[i - 1][w]
+
+    res = matrix[n][capacity]
+    total = 0
+    wallet = []
+
+    w = capacity
+    for i in range(n, 0, -1):
+        if res <= 0:
+            break
+        if res == matrix[i - 1][w]:
+            continue
+        else:
+            res = res - val[i - 1]
+            w = w - wt[i - 1][0]
+            wallet.append(wt[i - 1][1])
+
+    for i in clean_data:
+        if i["name"] in wallet:
+            total += i["price"] / 100
+
+    return round(matrix[n][capacity] / 1000000, 2), round(total,2), wallet, len(wallet)
 
 
+if __name__ == "__main__":
+    data = read_csv("dataset2_Python+P7.csv", float_numbers=True)
+
+    for row in data:
+        row["money"] = round((row["price"] * row["profit"] / 100) * 100)
+
+    clean_data = sorted(data, key=lambda x: x["money"], reverse=True)
+
+    # print(optimized())
+
+    val = [row["money"] for row in data]
+    wt = [(row["price"], row["name"]) for row in data]
+    capacity = 50000
+    n = len(val)
+    print(knapSack(capacity, wt, val, n))
