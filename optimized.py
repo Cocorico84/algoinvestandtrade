@@ -6,9 +6,9 @@ def optimized():
     wallet = []
     total = 0
     profit = 0
-    while total <= 500:
+    while total <= 50000:
         for row in clean_data:
-            if row["price"] + total > 500:
+            if row["price"] + total > 50000:
                 continue
             else:
                 wallet.append(row["name"])
@@ -16,14 +16,14 @@ def optimized():
                 profit += row["money"]
         break
     return {
-        "total": total,
-        "profit": profit,
+        "total": round(total/100, 2),
+        "profit": round(profit / 1000000, 2),
         "wallet": wallet
     }
 
 
 @timer
-def knapSack(capacity, wt, val, n):
+def knapsack(capacity, wt, val, n):
     matrix = [[0 for x in range(capacity + 1)] for x in range(n + 1)]
 
     for i in range(n + 1):
@@ -54,7 +54,7 @@ def knapSack(capacity, wt, val, n):
         if i["name"] in wallet:
             total += i["price"] / 100
 
-    return round(matrix[n][capacity] / 1000000, 2), round(total,2), wallet, len(wallet)
+    return round(matrix[n][capacity] / 1000000, 2), round(total, 2), wallet, len(wallet)
 
 
 if __name__ == "__main__":
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     wt = [(row["price"], row["name"]) for row in data]
     capacity = 50000
     n = len(val)
-    print(knapSack(capacity, wt, val, n))
+    print(knapsack(capacity, wt, val, n))
