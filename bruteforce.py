@@ -51,5 +51,5 @@ def get_best_wallet(data: list) -> dict:
 
 
 if __name__ == "__main__":
-    data = read_csv("bruteforce_data.csv", float_numbers=False)
+    data = read_csv("datasets/bruteforce_data.csv", float_numbers=False)
     print(get_best_wallet(data))

@@ -59,11 +59,11 @@ def knapsack(capacity, wt, val, n):
         if i["name"] in wallet:
             total += i["price"] / 100
 
-    return round(matrix[n][capacity] / 1000000, 2), round(total, 2), wallet, len(wallet)
+    return round(matrix[n][capacity] / 1000000, 2), round(total, 2), wallet
 
 
 if __name__ == "__main__":
-    data = read_csv(f"dataset{args.dataset}_Python+P7.csv", float_numbers=True)
+    data = read_csv(f"datasets/dataset{args.dataset}_Python+P7.csv", float_numbers=True)
 
     for row in data:
         row["money"] = round((row["price"] * row["profit"] / 100) * 100)
