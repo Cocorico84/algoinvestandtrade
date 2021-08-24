@@ -26,8 +26,18 @@ python bruteforce.py
 ```
 
 If you want to use the greedy algorithm or knapsack algorithm.
+
+You have to put 2 arguments:
+- dataset: 1 or 2
+- type: "greedy" or "knapsack"
+
+Example:
 ```console
-python optimized.py
+python optimized.py -d 1 -t greedy
+```
+or
+```console
+python optimized.py --dataset 2 --type knapsack
 ```
 
 # Contributor

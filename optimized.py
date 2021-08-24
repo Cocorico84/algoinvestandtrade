@@ -1,5 +1,10 @@
 from utils import read_csv, timer
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--dataset", type=str, required=True, action="store")
+parser.add_argument("-t", "--type", type=str, required=True, action="store")
+args = parser.parse_args()
 
 @timer
 def optimized():
@@ -58,17 +63,20 @@ def knapsack(capacity, wt, val, n):
 
 
 if __name__ == "__main__":
-    data = read_csv("dataset2_Python+P7.csv", float_numbers=True)
+    data = read_csv(f"dataset{args.dataset}_Python+P7.csv", float_numbers=True)
 
     for row in data:
         row["money"] = round((row["price"] * row["profit"] / 100) * 100)
 
     clean_data = sorted(data, key=lambda x: x["money"], reverse=True)
 
-    # print(optimized())
-
-    val = [row["money"] for row in data]
-    wt = [(row["price"], row["name"]) for row in data]
-    capacity = 50000
-    n = len(val)
-    print(knapsack(capacity, wt, val, n))
+    if args.type == "greedy":
+        print(optimized())
+    elif args.type == "knapsack":
+        val = [row["money"] for row in data]
+        wt = [(row["price"], row["name"]) for row in data]
+        capacity = 50000
+        n = len(val)
+        print(knapsack(capacity, wt, val, n))
+    else:
+        print("I don't know this algorithm!")
