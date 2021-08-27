@@ -7,7 +7,7 @@ parser.add_argument("-t", "--type", type=str, required=True, action="store")
 args = parser.parse_args()
 
 @timer
-def optimized():
+def optimized() -> dict:
     wallet = []
     total = 0
     profit = 0
@@ -28,7 +28,7 @@ def optimized():
 
 
 @timer
-def knapsack(capacity, wt, val, n):
+def knapsack(capacity: int, wt: list, val: list, n: int) -> dict:
     matrix = [[0 for x in range(capacity + 1)] for x in range(n + 1)]
 
     for i in range(n + 1):
@@ -59,7 +59,10 @@ def knapsack(capacity, wt, val, n):
         if i["name"] in wallet:
             total += i["price"] / 100
 
-    return round(matrix[n][capacity] / 1000000, 2), round(total, 2), wallet
+    return {
+        "total": round(total, 2),
+        "profit": round(matrix[n][capacity] / 1000000, 2),
+        "wallet": wallet}
 
 
 if __name__ == "__main__":
